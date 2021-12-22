@@ -55,6 +55,8 @@
             Default,
             Dense
         }
+        [Browsable(false)]
+        public Color AccentTextColor { get; set; }
 
         [Browsable(false)]
         public Color NoAccentTextColor { get; set; }
@@ -240,6 +242,7 @@
             Density = MaterialButtonDensity.Default;
             NoAccentTextColor = Color.Empty;
             CharacterCasing = CharacterCasingEnum.Upper;
+            AccentTextColor = SkinManager.ColorScheme.AccentColor;
 
             _animationManager = new AnimationManager(false)
             {
@@ -533,7 +536,7 @@
             }
 
             Color textColor = Enabled ? (HighEmphasis ? (Type == MaterialButtonType.Text || Type == MaterialButtonType.Outlined) ?
-                UseAccentColor ? SkinManager.ColorScheme.AccentColor : // Outline or Text and accent and emphasis
+                UseAccentColor ? AccentTextColor : // Outline or Text and accent and emphasis
                 NoAccentTextColor == Color.Empty ? 
                 SkinManager.ColorScheme.PrimaryColor :  // Outline or Text and emphasis
                 NoAccentTextColor : // User defined Outline or Text and emphasis

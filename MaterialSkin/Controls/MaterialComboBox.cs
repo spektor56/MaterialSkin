@@ -181,7 +181,7 @@
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
             g.FillPath((SolidBrush)(Enabled ? DroppedDown || Focused ?
                 SelectedBrush : //DroppedDown or Focused
-                SkinManager.TextHighEmphasisBrush : //Not DroppedDown and not Focused
+                (UseTallSize ? SkinManager.TextHighEmphasisBrush : new SolidBrush(Color.FromArgb(153, 255, 255, 255))) : //Not DroppedDown and not Focused
                 new SolidBrush(DrawHelper.BlendColor(SkinManager.TextHighEmphasisColor, SkinManager.SwitchOffDisabledThumbColor, 197))  //Disabled
                 ), pth);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
@@ -192,7 +192,7 @@
             int hintTextSize = 16;
 
             // bottom line base
-            g.FillRectangle(SkinManager.DividersAlternativeBrush, 0, LINE_Y, Width, 1);
+            g.FillRectangle((UseTallSize ? SkinManager.DividersAlternativeBrush : new SolidBrush(Color.FromArgb(153, 255, 255, 255))), 0, LINE_Y, Width, 1);
 
             if (!_animationManager.IsAnimating())
             {
@@ -247,7 +247,7 @@
                 NativeText.DrawTransparentText(
                     Text,
                     SkinManager.getLogFontByType(MaterialSkinManager.fontType.Subtitle1),
-                    Enabled ? SkinManager.TextHighEmphasisColor : SkinManager.TextDisabledOrHintColor,
+                    Enabled ? (UseTallSize ? SkinManager.TextHighEmphasisColor : Color.FromArgb(222, 255, 255, 255)) : SkinManager.TextDisabledOrHintColor,
                     textRect.Location,
                     textRect.Size,
                     NativeTextRenderer.TextAlignFlags.Left | NativeTextRenderer.TextAlignFlags.Middle);
@@ -265,7 +265,7 @@
                     SkinManager.getTextBoxFontBySize(hintTextSize),
                     Enabled ? DroppedDown || Focused ? 
                     SelectedColor : // Focus 
-                    SkinManager.TextMediumEmphasisColor : // not focused
+                    (UseTallSize ? SkinManager.TextMediumEmphasisColor : Color.FromArgb(153, 255, 255, 255)) : // not focused
                     SkinManager.TextDisabledOrHintColor, // Disabled
                     hintRect.Location,
                     hintRect.Size,

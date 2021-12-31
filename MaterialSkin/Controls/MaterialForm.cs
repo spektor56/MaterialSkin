@@ -414,6 +414,7 @@ namespace MaterialSkin.Controls
 
         public MaterialForm()
         {
+            Opacity = 0;
             DrawerWidth = 200;
             DrawerIsOpen = false;
             DrawerShowIconsWhenHidden = false;
@@ -443,7 +444,9 @@ namespace MaterialSkin.Controls
             {
                 if (DesignMode || IsDisposed)
                     return;
+                
                 AddDrawerOverlayForm();
+                Opacity = 100;
             };
         }
 

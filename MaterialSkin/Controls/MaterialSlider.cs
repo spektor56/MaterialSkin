@@ -22,7 +22,7 @@ namespace MaterialSkin.Controls
 
         private const int _activeTrack = 6;
         private const int _inactiveTrack = 4;
-        private const int _thumbRadius = 20;
+        private const int _thumbRadius = 10;
         private const int _thumbRadiusHoverPressed = 40;
 
 
@@ -416,17 +416,17 @@ namespace MaterialSkin.Controls
                 if (_mousePressed)
                 {
                     //g.FillEllipse(_accentBrush, _indicatorRectanglePressed);
-                    g.FillEllipse(_accentBrush, _indicatorRectangleNormal);
-                    g.FillEllipse(new SolidBrush(_thumbPressedColor), _indicatorRectanglePressed);
+                    //g.FillEllipse(_accentBrush, _indicatorRectangleNormal);
+                    //g.FillEllipse(new SolidBrush(_thumbPressedColor), _indicatorRectanglePressed);
 
                 }
                 else
                 {
-                    g.FillEllipse(_accentBrush, _indicatorRectangleNormal);
+                    //g.FillEllipse(_accentBrush, _indicatorRectangleNormal);
 
                     if (_hovered)
                     {
-                        g.FillEllipse(new SolidBrush(_thumbHoverColor), _indicatorRectanglePressed);
+                        //g.FillEllipse(new SolidBrush(_thumbHoverColor), _indicatorRectanglePressed);
                     }
                 }
             }

@@ -3,6 +3,7 @@
     using MaterialSkin.Animations;
     using System;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Drawing;
     using System.Drawing.Drawing2D;
     using System.Drawing.Imaging;
@@ -15,6 +16,14 @@
     /// </summary>
     public class MaterialButton : Button, IMaterialControl
     {
+        private Timer animationTimer = new Timer();
+        private Stopwatch animationStopwatch = new Stopwatch();
+        private float currentDistance = 0;
+        private float ANIMATION_SPEED; // Units per millisecond
+        private float pathLength;
+        private LinearGradientBrush animationBrush;
+        private Pen animationPen;
+        private bool isAnimationEnabled = false;
 
         private const int ICON_SIZE = 24;
         private const int MINIMUMWIDTH = 64;
@@ -277,6 +286,98 @@
             AutoSize = true;
             Margin = new Padding(4, 6, 4, 6);
             Padding = new Padding(0);
+
+            animationBrush = new LinearGradientBrush(new PointF(0, 0), new PointF(1, 1), Color.Aqua, Color.Transparent);
+            animationPen = new Pen(animationBrush, 2);
+
+            animationTimer.Interval = 33; // Run the timer at 30 fps
+            animationTimer.Tick += (sender, e) =>
+            {
+                float elapsed = animationStopwatch.ElapsedMilliseconds;
+                animationStopwatch.Restart();
+                currentDistance += elapsed * ANIMATION_SPEED; // Adjust this value to change the speed of the animation
+
+                if (currentDistance >= pathLength)
+                    currentDistance -= pathLength;
+
+                Invalidate();
+            };
+        }
+
+        protected override void OnSizeChanged(EventArgs e)
+        {
+            base.OnSizeChanged(e);
+            pathLength = 2 * (Width + Height); // Recalculate the path length when the size changes
+            ANIMATION_SPEED = pathLength / 2500; // Recalculate the animation speed when the size changes
+        }
+
+        public void EnableAnimation()
+        {
+            isAnimationEnabled = true;
+            animationStopwatch.Start();
+            animationTimer.Start();
+        }
+
+        public void DisableAnimation()
+        {
+            isAnimationEnabled = false;
+            animationStopwatch.Stop();
+            animationTimer.Stop();
+        }
+
+        private void DrawAnimation(Graphics g)
+        {
+            if (!isAnimationEnabled)
+                return;
+
+            // Calculate the start and end points of the line
+            float xStart, yStart, xEnd, yEnd;
+
+            // Calculate the position along the path of the button's border
+            if (currentDistance <= Width) // Top edge
+            {
+                xStart = currentDistance;
+                yStart = 0;
+                xEnd = 0; // Start from the beginning of the edge
+                yEnd = 0;
+                animationPen.Width = 1; // Set the pen width to 1
+            }
+            else if (currentDistance <= Width + Height) // Right edge
+            {
+                xStart = Width;
+                yStart = currentDistance - Width;
+                xEnd = Width;
+                yEnd = 0; // Start from the beginning of the edge
+                animationPen.Width = 3; // Reset the pen width to 2
+            }
+            else if (currentDistance <= 2 * Width + Height) // Bottom edge
+            {
+                xStart = Width - (currentDistance - Width - Height);
+                yStart = Height;
+                xEnd = Width; // Start from the beginning of the edge
+                yEnd = Height;
+                animationPen.Width = 3; // Reset the pen width to 2
+            }
+            else // Left edge
+            {
+                xStart = 0;
+                yStart = Height - (currentDistance - 2 * Width - Height);
+                xEnd = 0;
+                yEnd = Height; // Start from the beginning of the edge
+                animationPen.Width = 1; // Set the pen width to 1
+            }
+
+            // Ensure the end point is always different from the start point
+            xEnd += 0.1f;
+            yEnd += 0.1f;
+
+            // Update the brush and pen
+            animationBrush.Dispose();
+            animationBrush = new LinearGradientBrush(new PointF(xStart, yStart), new PointF(xEnd, yEnd), Color.Aqua, Color.Transparent);
+            animationPen.Brush = animationBrush;
+
+            // Draw the line
+            g.DrawLine(animationPen, xStart, yStart, xEnd, yEnd);
         }
 
         /// <summary>
@@ -569,6 +670,9 @@
             {
                 g.FillRectangle(iconsBrushes, iconRect);
             }
+
+            // Draw the animation
+            DrawAnimation(g);
         }
 
         /// <summary>

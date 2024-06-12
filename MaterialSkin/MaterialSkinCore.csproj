@@ -19,6 +19,7 @@
       <PackageTags>material design materialdesign google forms theme skin</PackageTags>
       <PackageReadmeFile>README.md</PackageReadmeFile>
       <PlatformTarget>x64</PlatformTarget>
+      <Platforms>AnyCPU;x64</Platforms>
     </PropertyGroup>
 	<ItemGroup Condition="'$(TargetFramework.TrimEnd(`0123456789`))' == 'net'">
 		<Reference Include="System.Design" />

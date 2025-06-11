@@ -602,8 +602,8 @@ namespace MaterialSkin.Controls
             FixFormPadding(this);
 
             // Fix Closing the Drawer or Overlay form with Alt+F4 not exiting the app
-            drawerOverlay.FormClosed += TerminateOnClose;
-            drawerForm.FormClosed += TerminateOnClose;
+            //drawerOverlay.FormClosed += TerminateOnClose;
+            //drawerForm.FormClosed += TerminateOnClose;
             drawerForm.Attach(drawerControl);
         }
 

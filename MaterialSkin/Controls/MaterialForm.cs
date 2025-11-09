@@ -446,7 +446,7 @@ namespace MaterialSkin.Controls
                     return;
                 
                 AddDrawerOverlayForm();
-                Opacity = 100;
+                Opacity = 1.0f;
             };
         }
 
